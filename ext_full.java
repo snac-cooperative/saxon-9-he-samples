@@ -6,11 +6,6 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.tree.iter.*;
 
-// import net.sf.saxon.s9api.SequenceType;
-// import net.sf.saxon.functions.*;
-// import net.sf.saxon.lib.*;
-// import net.sf.saxon.om.*;
-
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.DoubleValue;
@@ -27,8 +22,20 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.TransformerFactoryImpl;
 
 /*
-  http://codingwithpassion.blogspot.com/2011/03/saxon-xslt-java-example.html
-    
+  Author: Tom Laudeman
+  The Institute for Advanced Technology in the Humanities
+  
+  Copyright 2013 University of Virginia. Licensed under the Educational Community License, Version 2.0 (the
+  "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at
+  
+  http://opensource.org/licenses/ECL-2.0
+  http://www.osedu.org/licenses/ECL-2.0
+  
+  Unless required by applicable law or agreed to in writing, software distributed under the License is
+  distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  the License for the specific language governing permissions and limitations under the License.
+
   Simple transformation method.
   @param sourcePath - Absolute path to source xml file.
   @param xsltPath - Absolute path to xslt file.
@@ -42,32 +49,14 @@ import net.sf.saxon.TransformerFactoryImpl;
     
   javac ext_full.java
   java ext_full
+
+  Loosely derived from code at:
+  http://codingwithpassion.blogspot.com/2011/03/saxon-xslt-java-example.html
+    
 */
 
 public class ext_full
 {
-    // private TransformerFactory getTransformerFactory() throws net.sf.saxon.trans.XPathException
-    // {
-    //   TransformerFactory tFactory = TransformerFactory.newInstance();
-    //   if (tFactory instanceof TransformerFactoryImpl)
-    //     {
-    //       TransformerFactoryImpl tFactoryImpl = (TransformerFactoryImpl) tFactory;
-    //       net.sf.saxon.Configuration saxonConfig = tFactoryImpl.getConfiguration();
-    //       saxonConfig.registerExtensionFunction(new dump_string());
-    //     }
-    //   return tFactory;
-    // }
-
-
-    // The extension must be registered with the configuration:
-
-    // configuration.registerExtensionFunction(new ShiftLeft())
-    // and it can then be called like this:
-
-    // declare namespace eg="http://example.com/saxon-extension";
-    //           for $i in 1 to 10 return eg:shift-left(2, $i)"
-
-  // final?
   private static class ShiftLeft extends ExtensionFunctionDefinition
     {
         @Override
@@ -94,8 +83,6 @@ public class ext_full
             return new sl_call();
         }
         
-        // call(net.sf.saxon.expr.XPathContext,net.sf.saxon.om.Sequence[])
-        
         private static class sl_call extends ExtensionFunctionCall
         {
             @Override
@@ -108,14 +95,15 @@ public class ext_full
                                                                   ItemType.INTEGER);
                         seq = new_item.getUnderlyingValue();
                     }
-                catch (SaxonApiException e) {}
-
-                // print(arguments[0].getUnderlyingValue());
+                catch (SaxonApiException sae)
+                  {
+                    sae.printStackTrace();
+                  }
 
                 // Works!
                 return seq;
 
-                // works, but not very useful
+                // Works also, but not very useful.
                 // return arguments[0];
             }
         }

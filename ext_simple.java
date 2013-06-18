@@ -6,24 +6,39 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.functions.*;
 
+/*
+  Author: Tom Laudeman
+  The Institute for Advanced Technology in the Humanities
+        
+  Copyright 2013 University of Virginia. Licensed under the Educational Community License, Version 2.0 (the
+  "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at
+        
+  http://opensource.org/licenses/ECL-2.0
+  http://www.osedu.org/licenses/ECL-2.0
+        
+  Unless required by applicable law or agreed to in writing, software distributed under the License is
+  distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  the License for the specific language governing permissions and limitations under the License.
+
+  This requires Saxon 9.5 Works with HE. Will not work with Saxon 9.4 or earlier.
+
+  Requires XSL file ext_simple.xsl.
+
+  export CLASSPATH=$HOME/bin/saxon9he.jar:$CLASSPATH
+  javac ext_simple.java
+  java ext_simple
+
+  Loosely derived from code at:
+  http://codingwithpassion.blogspot.com/2011/03/saxon-xslt-java-example.html
+*/
+
 public class ext_simple
 {
-    /*
-      http://codingwithpassion.blogspot.com/2011/03/saxon-xslt-java-example.html
+  // Simple transformation method. Relative and absolute paths seem to work.
+  // @param sourcePath - path to source xml file.
+  // @param xsltPath - path to xslt script file.
     
-      Simple transformation method.
-      @param sourcePath - Absolute path to source xml file.
-      @param xsltPath - Absolute path to xslt file.
-      @param resultDir - Directory where you want to put resulting files.
-    
-      This requires Saxon 9.5 Works with HE. Will not work with Saxon 9.4 or earlier.
-
-      Requires XSL file ext_simple.xsl.
-
-      export CLASSPATH=$HOME/bin/saxon9he.jar:$CLASSPATH
-      javac ext_simple.java
-      java ext_simple
-    */
     public static void simpleTransform(String sourcePath,
                                        String xsltPath)
     {
