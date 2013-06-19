@@ -6,6 +6,7 @@ Edition). Version 9.5 is required since dramatic changes were made after 9.4.
 Requirements:
 
 Java
+
 SaxonHE9 (version 9.5)
 
 This has been tested on Linux. It probably works with MacOS and will need minor modifications to work with MS

@@ -1,25 +1,57 @@
+
+import java.lang.reflect.Method;
+import java.util.*;
+
+// imports from ext_simple
 import java.io.File;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.tree.iter.*;
+// import net.sf.saxon.functions.*;
 
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.value.SequenceType;
-import net.sf.saxon.value.DoubleValue;
-import net.sf.saxon.value.StringValue;
-import net.sf.saxon.value.Int64Value;
-import net.sf.saxon.value.IntegerValue;
-
-import net.sf.saxon.om.StructuredQName; 
-import net.sf.saxon.om.SequenceIterator;
-import net.sf.saxon.expr.XPathContext;
+// Need these additional imports:
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.Configuration;
+import net.sf.saxon.expr.XPathContext;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.om.*;
 import net.sf.saxon.TransformerFactoryImpl;
+
+// The signature for SequenceType conflicts with s9api, and value.SequenceType is required so we can get
+// SINGLE_INTEGER so we must use the full classpath for SequenceType in the code.
+import net.sf.saxon.value.*;
+
+
+
+// original imports
+// import java.io.File;
+// import javax.xml.transform.Transformer;
+// import javax.xml.transform.TransformerFactory;
+// import javax.xml.transform.stream.StreamResult;
+// import javax.xml.transform.stream.StreamSource;
+// import net.sf.saxon.s9api.*;
+// import net.sf.saxon.tree.iter.*;
+
+// import net.sf.saxon.trans.XPathException;
+// import net.sf.saxon.value.SequenceType;
+// import net.sf.saxon.value.DoubleValue;
+// import net.sf.saxon.value.StringValue;
+// import net.sf.saxon.value.Int64Value;
+// import net.sf.saxon.value.IntegerValue;
+
+// import net.sf.saxon.om.*;
+// import net.sf.saxon.expr.XPathContext;
+// import net.sf.saxon.lib.ExtensionFunctionCall;
+// import net.sf.saxon.lib.ExtensionFunctionDefinition;
+// import net.sf.saxon.Configuration;
+// import net.sf.saxon.TransformerFactoryImpl;
+
+// Some extra imports. Not clear why theses are commented out
+
+// import net.sf.saxon.om.StructuredQName; 
+// import net.sf.saxon.om.SequenceIterator;
 
 /*
   Author: Tom Laudeman
@@ -66,15 +98,19 @@ public class ext_full
         }
     
         @Override
-        public SequenceType[] getArgumentTypes()
+        public net.sf.saxon.value.SequenceType[] getArgumentTypes()
         {
-            return new SequenceType[] {SequenceType.SINGLE_INTEGER, SequenceType.SINGLE_INTEGER};
+            return new net.sf.saxon.value.SequenceType[] {net.sf.saxon.value.SequenceType.SINGLE_INTEGER,
+                                                          net.sf.saxon.value.SequenceType.SINGLE_INTEGER};
         }
 
+        // I wonder which SequenceType is newest/correct?
+        // public net.sf.saxon.value.SequenceType getResultType(net.sf.saxon.value.SequenceType[] suppliedArgumentTypes)
+
         @Override
-        public SequenceType getResultType(net.sf.saxon.value.SequenceType[] suppliedArgumentTypes)
+        public net.sf.saxon.value.SequenceType getResultType(net.sf.saxon.value.SequenceType[] suppliedArgumentTypes)
         {
-            return SequenceType.SINGLE_INTEGER;
+            return net.sf.saxon.value.SequenceType.SINGLE_INTEGER;
         }
 
         @Override
@@ -91,11 +127,24 @@ public class ext_full
                 net.sf.saxon.om.Sequence seq  = null;
                 try
                     {
-                        XdmItem new_item = XdmItem.newAtomicValue("4242",
-                                                                  ItemType.INTEGER);
+                        /*
+                          Interestingly XdmItem.newAtomicValue() is deprecated, although there's no mention of
+                          that in the docs at
+                          http://www.saxonica.com/documentation/#!javadoc/net.sf.saxon.s9api/XdmItem
+                          
+                          The deprecation warning goes away when we instead create a new XdmAtomicValue object/item.
+                          
+                          XdmItem new_item = XdmItem.newAtomicValue("4242", ItemType.INTEGER);
+                        */
+
+                        // This works. It is fragile since it depends on fairly strict data types.
+                        double arg_zero = ((Int64Value)arguments[0]).getDoubleValue();
+                        double arg_one = ((Int64Value)arguments[1]).getDoubleValue();
+
+                        XdmItem new_item = new XdmAtomicValue((int)(arg_zero + arg_one));
                         seq = new_item.getUnderlyingValue();
                     }
-                catch (SaxonApiException sae)
+                catch (Exception sae)
                   {
                     sae.printStackTrace();
                   }
@@ -110,8 +159,7 @@ public class ext_full
   }
 
     public static void simpleTransform(String sourcePath,
-                                       String xsltPath,
-                                       String resultDir)
+                                       String xsltPath)
     {
         TransformerFactory tFactory = TransformerFactory.newInstance();
         TransformerFactoryImpl tFactoryImpl = (TransformerFactoryImpl) tFactory;
@@ -134,9 +182,44 @@ public class ext_full
                 e.printStackTrace();
             }
     }
-  
+
+    /*
+      Gets an array of all methods in a class hierarchy walking up to parent classes
+      @param objectClass the class
+      @return the methods array
+
+      wildcard parameterized type aka generic type parameters
+    */
+    public static Method[] getAllMethodsInHierarchy(Class<?> objectClass)
+    {
+        Set<Method> allMethods = new HashSet<Method>();
+        Method[] declaredMethods = objectClass.getDeclaredMethods();
+        Method[] methods = objectClass.getMethods();
+        if (objectClass.getSuperclass() != null)
+            {
+                Class<?> superClass = objectClass.getSuperclass();
+                Method[] superClassMethods = getAllMethodsInHierarchy(superClass);
+                allMethods.addAll(Arrays.asList(superClassMethods));
+            }
+        allMethods.addAll(Arrays.asList(declaredMethods));
+        allMethods.addAll(Arrays.asList(methods));
+        return allMethods.toArray(new Method[allMethods.size()]);
+    }
+
     public static void main(String[] args) 
     {
+        if (1 == 0)
+            {
+                XdmAtomicValue xav = new XdmAtomicValue("stuff");
+                // String zz = "1234";
+                // Method[] arr = getAllMethodsInHeirarchy(zz.getClass());
+                Method[] arr = getAllMethodsInHierarchy(xav.getClass());
+                
+                for (Method met: arr)
+                    {
+                        System.out.println(met.toString());
+                    }
+            }
         //Set saxon as transformer.
         System.setProperty("javax.xml.transform.TransformerFactory",
                            "net.sf.saxon.TransformerFactoryImpl");

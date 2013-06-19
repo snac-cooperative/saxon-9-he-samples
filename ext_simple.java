@@ -42,7 +42,6 @@ public class ext_simple
     public static void simpleTransform(String sourcePath,
                                        String xsltPath)
     {
-        TransformerFactory tFactory = TransformerFactory.newInstance();
         try
             {
                 ExtensionFunction sqrt = new ExtensionFunction()
@@ -69,6 +68,7 @@ public class ext_simple
                         {
                             double arg = ((XdmAtomicValue)arguments[0].itemAt(0)).getDoubleValue();
                             double result = Math.sqrt(arg);
+                            System.out.println( "sqrt: " + result );
                             return new XdmAtomicValue(result);
                         }
                     };
@@ -107,10 +107,6 @@ public class ext_simple
   
     public static void main(String[] args) 
     {
-    
-        //Set saxon as transformer.
-        System.setProperty("javax.xml.transform.TransformerFactory",
-                           "net.sf.saxon.TransformerFactoryImpl");
 
         simpleTransform("dummy.xml", "ext_simple.xsl");
     }
