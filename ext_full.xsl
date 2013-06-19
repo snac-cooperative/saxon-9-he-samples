@@ -15,8 +15,8 @@
             <xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001]-[M01]-[D01] [h01]:[m01]:[s01]')"/>
             <xsl:text>&#x0A;date: </xsl:text>
             <xsl:value-of select="$dateNow"/>
-            <xsl:text>&#x0A;shift-left: </xsl:text>
-            <xsl:value-of select="eg:shift-left(33, 22)"/>
+            <xsl:text>&#x0A;add-two: </xsl:text>
+            <xsl:value-of select="eg:add-two(33, 44)"/>
             <xsl:text>&#x0A;</xsl:text>
         </output>
     </xsl:template>

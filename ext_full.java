@@ -23,36 +23,6 @@ import net.sf.saxon.TransformerFactoryImpl;
 // SINGLE_INTEGER so we must use the full classpath for SequenceType in the code.
 import net.sf.saxon.value.*;
 
-
-
-// original imports
-// import java.io.File;
-// import javax.xml.transform.Transformer;
-// import javax.xml.transform.TransformerFactory;
-// import javax.xml.transform.stream.StreamResult;
-// import javax.xml.transform.stream.StreamSource;
-// import net.sf.saxon.s9api.*;
-// import net.sf.saxon.tree.iter.*;
-
-// import net.sf.saxon.trans.XPathException;
-// import net.sf.saxon.value.SequenceType;
-// import net.sf.saxon.value.DoubleValue;
-// import net.sf.saxon.value.StringValue;
-// import net.sf.saxon.value.Int64Value;
-// import net.sf.saxon.value.IntegerValue;
-
-// import net.sf.saxon.om.*;
-// import net.sf.saxon.expr.XPathContext;
-// import net.sf.saxon.lib.ExtensionFunctionCall;
-// import net.sf.saxon.lib.ExtensionFunctionDefinition;
-// import net.sf.saxon.Configuration;
-// import net.sf.saxon.TransformerFactoryImpl;
-
-// Some extra imports. Not clear why theses are commented out
-
-// import net.sf.saxon.om.StructuredQName; 
-// import net.sf.saxon.om.SequenceIterator;
-
 /*
   Author: Tom Laudeman
   The Institute for Advanced Technology in the Humanities
@@ -89,12 +59,12 @@ import net.sf.saxon.value.*;
 
 public class ext_full
 {
-  private static class ShiftLeft extends ExtensionFunctionDefinition
+  private static class AddTwo extends ExtensionFunctionDefinition
     {
         @Override
         public StructuredQName getFunctionQName()
         {
-            return new StructuredQName("eg", "http://example.com/saxon-extension", "shift-left");
+            return new StructuredQName("eg", "http://example.com/saxon-extension", "add-two");
         }
     
         @Override
@@ -164,7 +134,7 @@ public class ext_full
         TransformerFactory tFactory = TransformerFactory.newInstance();
         TransformerFactoryImpl tFactoryImpl = (TransformerFactoryImpl) tFactory;
         net.sf.saxon.Configuration saxonConfig = tFactoryImpl.getConfiguration();
-        saxonConfig.registerExtensionFunction(new ShiftLeft());
+        saxonConfig.registerExtensionFunction(new AddTwo());
 
         try
             {
