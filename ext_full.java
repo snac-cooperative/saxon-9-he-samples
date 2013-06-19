@@ -59,7 +59,7 @@ import net.sf.saxon.value.*;
 
 public class ext_full
 {
-  private static class AddTwo extends ExtensionFunctionDefinition
+    private static class AddTwo extends ExtensionFunctionDefinition
     {
         @Override
         public StructuredQName getFunctionQName()
@@ -115,9 +115,9 @@ public class ext_full
                         seq = new_item.getUnderlyingValue();
                     }
                 catch (Exception sae)
-                  {
-                    sae.printStackTrace();
-                  }
+                    {
+                        sae.printStackTrace();
+                    }
 
                 // Works!
                 return seq;
@@ -126,7 +126,7 @@ public class ext_full
                 // return arguments[0];
             }
         }
-  }
+    }
 
     public static void simpleTransform(String sourcePath,
                                        String xsltPath)
@@ -153,16 +153,34 @@ public class ext_full
             }
     }
 
+    public static class SortByString implements Comparator<Method>
+    {
+        public int compare(Method n1, Method n2)
+        {
+            // The easy sort is just toString, but we could use a combination of getName() and other
+            // methods. Or toGenericString().
+            // return n1.toGenericString().compareTo(n2.toGenericString());
+            return n1.getName().compareTo(n2.getName());
+        }
+    }
+
+
     /*
+      This is here for debugging. It can be a challenge to follow the dizzying heirarchy of classes and method
+      signatures. The docs are somewhat hard to read as well. Now and then, it simplifies things to cut to the
+      chase and just print out the methods available for a given object.
+
       Gets an array of all methods in a class hierarchy walking up to parent classes
       @param objectClass the class
       @return the methods array
 
-      wildcard parameterized type aka generic type parameters
+      The "Class<?>" syntax is wildcard parameterized type aka generic type parameters.
     */
     public static Method[] getAllMethodsInHierarchy(Class<?> objectClass)
     {
-        Set<Method> allMethods = new HashSet<Method>();
+        
+        // Set<Method> allMethods = new HashSet<Method>();
+        TreeSet<Method> allMethods = new TreeSet<Method>(new SortByString());
         Method[] declaredMethods = objectClass.getDeclaredMethods();
         Method[] methods = objectClass.getMethods();
         if (objectClass.getSuperclass() != null)
@@ -173,26 +191,32 @@ public class ext_full
             }
         allMethods.addAll(Arrays.asList(declaredMethods));
         allMethods.addAll(Arrays.asList(methods));
-        return allMethods.toArray(new Method[allMethods.size()]);
+
+        Method[] allm = allMethods.toArray(new Method[allMethods.size()]);
+
+        // Due to the recursive nature of this func, our only choice is to return the list (as opposed to
+        // printing, or something).
+        return allm;
     }
 
     public static void main(String[] args) 
     {
-        if (1 == 0)
+        if (1 == 1)
             {
+                // Doing this in two lines with a instantiated object works.
                 XdmAtomicValue xav = new XdmAtomicValue("stuff");
-                // String zz = "1234";
-                // Method[] arr = getAllMethodsInHeirarchy(zz.getClass());
                 Method[] arr = getAllMethodsInHierarchy(xav.getClass());
                 
+                // Directly getting the class of the object's class is simpler.
+                arr = getAllMethodsInHierarchy(XdmAtomicValue.class);
                 for (Method met: arr)
                     {
-                        System.out.println(met.toString());
+                        // System.out.println(met.toString());
+                        System.out.println(met.getName() + ": " + met.toGenericString());
                     }
+                System.out.println();
+        
             }
-        //Set saxon as transformer.
-        System.setProperty("javax.xml.transform.TransformerFactory",
-                           "net.sf.saxon.TransformerFactoryImpl");
 
         simpleTransform("dummy.xml", "ext_full.xsl");
     }
