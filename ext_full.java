@@ -157,8 +157,9 @@ public class ext_full
     {
         public int compare(Method n1, Method n2)
         {
-            // The easy sort is just toString, but we could use a combination of getName() and other
-            // methods. Or toGenericString().
+            // The easy sort is just toString(), but we could use a combination of getName() and other
+            // methods. toString and toGenericString() seem to be identical.
+
             // return n1.toGenericString().compareTo(n2.toGenericString());
             return n1.getName().compareTo(n2.getName());
         }
@@ -167,19 +168,23 @@ public class ext_full
 
     /*
       This is here for debugging. It can be a challenge to follow the dizzying heirarchy of classes and method
-      signatures. The docs are somewhat hard to read as well. Now and then, it simplifies things to cut to the
-      chase and just print out the methods available for a given object.
+      signatures. Docs are often somewhat hard to read as well. Now and then, it simplifies things to cut to
+      the chase and just print out all available methods for a given object.
 
-      Gets an array of all methods in a class hierarchy walking up to parent classes
+      Gets an array of all methods in a class hierarchy by recursing up to parent classes.
       @param objectClass the class
       @return the methods array
+
+      Method[] arr = getAllMethodsInHierarchy(Int64Value.class);
 
       The "Class<?>" syntax is wildcard parameterized type aka generic type parameters.
     */
     public static Method[] getAllMethodsInHierarchy(Class<?> objectClass)
     {
-        
+        // The original example used a HashSet, but they don't sort well.
         // Set<Method> allMethods = new HashSet<Method>();
+
+        // Accumulate the results in a TreeSet and use SortByString() as a comparator.
         TreeSet<Method> allMethods = new TreeSet<Method>(new SortByString());
         Method[] declaredMethods = objectClass.getDeclaredMethods();
         Method[] methods = objectClass.getMethods();
@@ -201,14 +206,21 @@ public class ext_full
 
     public static void main(String[] args) 
     {
-        if (1 == 1)
+        // Normally disabled. Enable for debugging and info.
+        if (1 == 0)
             {
                 // Doing this in two lines with a instantiated object works.
-                XdmAtomicValue xav = new XdmAtomicValue("stuff");
-                Method[] arr = getAllMethodsInHierarchy(xav.getClass());
+                // XdmAtomicValue xav = new XdmAtomicValue("stuff");
+                // Method[] arr = getAllMethodsInHierarchy(xav.getClass());
                 
                 // Directly getting the class of the object's class is simpler.
-                arr = getAllMethodsInHierarchy(XdmAtomicValue.class);
+                // Method[] arr = getAllMethodsInHierarchy(XdmAtomicValue.class);
+
+                Class check = Int64Value.class;
+                System.out.println("Class: " + check.getName() + "\n" + "Package: " + check.getPackage() +"\n");
+
+                Method[] arr = getAllMethodsInHierarchy(check);
+
                 for (Method met: arr)
                     {
                         // System.out.println(met.toString());
