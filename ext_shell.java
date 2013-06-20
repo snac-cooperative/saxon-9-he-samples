@@ -123,14 +123,14 @@ public class ext_shell
                         //Build command 
                         List<String> commands = new ArrayList<String>();
 
-                        // StringValue.toString() returns a string with double quotes around it! '/bin/cat'
-                        // becomes "/bin/cat" where asString() returns /bin/cat.
+                        // Warning: Note: StringValue.toString() returns a string with double quotes around
+                        // it. '/bin/cat' becomes "/bin/cat" where asString() returns /bin/cat.
 
-                        commands.add(((StringValue)arguments[0]).asString());
-
-                        //Add arguments
-                        commands.add(((StringValue)arguments[1]).asString());
-
+                        //Add the arguments to the commands list.
+                        for (net.sf.saxon.om.Sequence narg: arguments)
+                            {
+                                commands.add(((StringValue)narg).asString());
+                            }
                         // System.out.println("Commands: " + commands);
                       
                         //Run macro on target

@@ -18,7 +18,23 @@
             <xsl:text>&#x0A;shell: </xsl:text>
             <xsl:value-of select="eg:shell('date', '-d10 jul 2013')"/>
             <xsl:text>&#x0A;</xsl:text>
-            <xsl:value-of select="eg:shell('date', '-d&quot;2 days ago&quot;')"/>
+            <!--
+                When creating command line args for the shell, do not use double quotes. Since each arg is a
+                separate string, embedded whitespace is not seen as argument separator happens in a 'real'
+                shell.
+
+                Wrong: -d&quot;2 days ago&quot;
+                Right: -d2 days ago
+            -->
+            <xsl:value-of select="eg:shell('date', '-d2 days ago')"/>
+            <xsl:text>&#x0A;</xsl:text>
+            <xsl:value-of select="eg:shell('date','--date=last month', '--rfc-3339=seconds')"/>
+            <xsl:text>&#x0A;</xsl:text>
+            <xsl:variable name="date_from_shell">
+                <xsl:value-of select="eg:shell('date','--date=last month', '+%Y-%m-%dT%H:%M:%S')"/>
+            </xsl:variable>
+            <xsl:text>formatted date from shell:</xsl:text>
+            <xsl:value-of select="format-dateTime($date_from_shell, '[Y0001]-[M01]-[D01] [h01]:[m01]:[s01]')"/>
             <xsl:text>&#x0A;</xsl:text>
         </output>
     </xsl:template>
