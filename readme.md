@@ -3,6 +3,14 @@
 This code contains complete, working examples of both ways to add extension functions to Saxon HE (Home
 Edition). Version 9.5 is required since dramatic changes were made after 9.4.
 
+The two Java programs (ext_full.java, ext_simple.java) run Saxon XSLT transformations on normal XSL files,
+with the addition of a function written in Java. That function is available in the XSL just like any other
+native XSL function. These examples should serve as the basis of novel XSL functions if you need to something
+that isn't available in Saxon.
+
+In these examples the XSL script and XML input file are both hardcoded. Perhaps I'll get around to
+parameterizing them to make these examples a bit more generalized.
+
 Requirements:
 
 Java
