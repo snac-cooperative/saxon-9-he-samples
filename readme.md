@@ -78,20 +78,20 @@ methods for a given class. generic_demo.java shows how this is done.
 Here is a session transcript with an elipsis (...) where I removed some of the output in the interest of
 brevity:
 
-> java generic_demo
-Class: java.lang.Class
-Package: package java.lang, Java Platform API Specification, version 1.6
+    > java generic_demo
+    Class: java.lang.Class
+    Package: package java.lang, Java Platform API Specification, version 1.6
 
-access$100: static boolean java.lang.Class.access$100(java.lang.Object[],java.lang.Object[])
-access$202: static boolean java.lang.Class.access$202(boolean)
-access$302: static boolean java.lang.Class.access$302(boolean)
-addAll: private static void java.lang.Class.addAll(java.util.Collection,java.lang.reflect.Field[])
-argumentTypesToString: private static java.lang.String java.lang.Class.argumentTypesToString(java.lang.Class[])
-arrayContentsEq: private static boolean java.lang.Class.arrayContentsEq(java.lang.Object[],java.lang.Object[])
-asSubclass: public <U> java.lang.Class<? extends U> java.lang.Class.asSubclass(java.lang.Class<U>)
-...
-toClass: private static java.lang.Class java.lang.Class.toClass(java.lang.reflect.Type)
-toString: public java.lang.String java.lang.Object.toString()
-wait: public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+    access$100: static boolean java.lang.Class.access$100(java.lang.Object[],java.lang.Object[])
+    access$202: static boolean java.lang.Class.access$202(boolean)
+    access$302: static boolean java.lang.Class.access$302(boolean)
+    addAll: private static void java.lang.Class.addAll(java.util.Collection,java.lang.reflect.Field[])
+    argumentTypesToString: private static java.lang.String java.lang.Class.argumentTypesToString(java.lang.Class[])
+    arrayContentsEq: private static boolean java.lang.Class.arrayContentsEq(java.lang.Object[],java.lang.Object[])
+    asSubclass: public <U> java.lang.Class<? extends U> java.lang.Class.asSubclass(java.lang.Class<U>)
+    ...
+    toClass: private static java.lang.Class java.lang.Class.toClass(java.lang.reflect.Type)
+    toString: public java.lang.String java.lang.Object.toString()
+    wait: public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
 
 
