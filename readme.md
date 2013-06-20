@@ -17,7 +17,7 @@ Let us assume you have installed saxon9he.jar in the the bin directory in your h
 
 Java is installed somewhere in a standard path. 
 
-This session transcript snippet should explain things:
+This session transcript snippet should explain the location of Java and the PATH environment variable:
 
     > which java
     /usr/bin/java
