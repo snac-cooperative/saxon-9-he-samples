@@ -79,12 +79,19 @@ public class ext_shell
         }
     
         @Override
+        public int getMaximumNumberOfArguments()
+        {
+            // For most things, 10 or 20 is probably enough. Shells like bash are limited more by the buffer
+            // size than the actual number of args.
+            return 100;
+        }
+        @Override
         public net.sf.saxon.value.SequenceType[] getArgumentTypes()
         {
             return new net.sf.saxon.value.SequenceType[] {net.sf.saxon.value.SequenceType.SINGLE_STRING};
         }
 
-        // I wonder which SequenceType is newest/correct?
+        // I wonder which SequenceType is newest/correct? net.sf.saxon.value or net.sf.saxon.s91pi?
         // public net.sf.saxon.value.SequenceType getResultType(net.sf.saxon.value.SequenceType[] suppliedArgumentTypes)
 
         @Override
@@ -115,20 +122,16 @@ public class ext_shell
 
                         //Build command 
                         List<String> commands = new ArrayList<String>();
-                        System.out.println("Commands: " + commands);
 
                         // StringValue.toString() returns a string with double quotes around it! '/bin/cat'
                         // becomes "/bin/cat" where asString() returns /bin/cat.
 
                         commands.add(((StringValue)arguments[0]).asString());
-                        System.out.println("Commands: " + commands);
-
 
                         //Add arguments
-                        // commands.add(((StringValue)arguments[1]).getStringValue());
-                        commands.add("dummy.xml");
+                        commands.add(((StringValue)arguments[1]).asString());
 
-                        System.out.println("Commands: " + commands);
+                        // System.out.println("Commands: " + commands);
                       
                         //Run macro on target
                         ProcessBuilder pb = new ProcessBuilder(commands);

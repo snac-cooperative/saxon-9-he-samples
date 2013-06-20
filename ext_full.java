@@ -181,7 +181,7 @@ public class ext_full
     */
     public static Method[] getAllMethodsInHierarchy(Class<?> objectClass)
     {
-        // The original example used a HashSet, but they don't sort well.
+        // The original example used a HashSet, but HashSet does not sort.
         // Set<Method> allMethods = new HashSet<Method>();
 
         // Accumulate the results in a TreeSet and use SortByString() as a comparator.

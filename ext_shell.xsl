@@ -15,8 +15,10 @@
             <xsl:value-of select="format-dateTime(current-dateTime(), '[Y0001]-[M01]-[D01] [h01]:[m01]:[s01]')"/>
             <xsl:text>&#x0A;date: </xsl:text>
             <xsl:value-of select="$dateNow"/>
-            <xsl:text>&#x0A;add-two: </xsl:text>
-            <xsl:value-of select="eg:shell('/bin/cat')"/>
+            <xsl:text>&#x0A;shell: </xsl:text>
+            <xsl:value-of select="eg:shell('date', '-d10 jul 2013')"/>
+            <xsl:text>&#x0A;</xsl:text>
+            <xsl:value-of select="eg:shell('date', '-d&quot;2 days ago&quot;')"/>
             <xsl:text>&#x0A;</xsl:text>
         </output>
     </xsl:template>
